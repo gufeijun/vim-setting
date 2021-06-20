@@ -18,3 +18,8 @@ youcompleteme需要单独编译：
 ~/.vim/bundles/YouCompleteMe/install.py --clangd-completer --go-completer 
 ```
 
+
+
+注意：wsl用户需要单独下载win32yank，具体见.vimrc
+
+非wsl用户注释掉
