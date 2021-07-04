@@ -1,7 +1,5 @@
 ## vim
 
-链接：https://github.com/ckelsel/vim-init
-
 ### 快捷键
 
 > normal模式
