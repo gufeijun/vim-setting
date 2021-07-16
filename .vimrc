@@ -489,6 +489,15 @@ augroup comments
   autocmd FileType go,c,cpp,cs,java,arduino setlocal commentstring=//\ %s
 augroup END
 
+call plug#end()
+
+"normal模式光标为fillbox，insert为|
+let &t_ti.="\e[1 q"
+let &t_SI.="\e[5 q"
+let &t_SR.="\e[4 q"
+let &t_EI.="\e[1 q"
+let &t_te.="\e[0 q"
+
 "非wsl用户应该将该区域注释
 "wsl系统剪切板支持，需要下载win32yank并配置PATH，https://github.com/equalsraf/win32yank
 autocmd TextYankPost * call YankDebounced()
@@ -506,6 +515,10 @@ function! YankDebounced()
     let g:yank_debounce_timer_id = timer_start(g:yank_debounce_time_ms, 'Yank')
 endfunction
 
+function! Paste(mode)
+    let @" = system('win32yank.exe -o --lf')
+    return a:mode
+endfunction
 
-
-call plug#end()
+map <expr> p Paste('p')
+map <expr> P Paste('P')
