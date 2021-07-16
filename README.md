@@ -9,7 +9,7 @@ gcc版本：>=8
 ```
 sudo apt install clang-format -y
 sudo apt install cmake build-essential python3-dev
-sudo apt installk g++
+sudo apt install g++
 ```
 
 youcompleteme需要单独编译：
