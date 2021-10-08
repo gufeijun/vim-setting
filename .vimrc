@@ -1,13 +1,12 @@
-"设置颜色主题，会在所有 runtimepaths 的 colors 目录寻找同名配置
 "colorscheme paradox
 "colorscheme dracula
 "colorscheme desert
 "colorscheme monokai
 "colorscheme desert256
 "colorscheme gruvbox
-"colorscheme papercol
+colorscheme papercol
 
-
+set vb t_vb=        "关闭vim提示音
 set nocompatible	"不兼容vi
 set synmaxcol=500	"不高亮长句
 set noerrorbells	"不要发出声音
@@ -65,7 +64,7 @@ set signcolumn=yes	"显示侧边栏
 set showtabline=2	" 总是显示标签栏
 set showcmd			"右下角显示命令
 " 设置黑色背景
-set background=dark
+set background=light
 " 允许 256 色
 set t_Co=256
 
@@ -333,45 +332,46 @@ endif
 let g:airline#extensions#ale#enabled = 1
 " 编辑不同文件类型需要的语法检查器
 let g:ale_linters = {
-			\ 'c': ['gcc', 'cppcheck'],
-			\ 'cpp': ['g++', 'cppcheck'],
 			\ 'python': ['flake8', 'pylint'],
 			\ 'lua': ['luac'],
 			\ 'java': ['javac'],
 			\ 'javascript': ['eslint'],
+			\ 'go': ['gopl','gofmt','go build'],
 			\ }
+			"\ 'c': ['gcc', 'cppcheck'],
+			"\ 'cpp': ['g++', 'cppcheck'],
 			"利用go-vim的提示
 			"\ 'go': ['gopl','gofmt','go build'],
-let g:ale_c_gcc_options = '-Wall -O2 -std=c99'
-let g:ale_cpp_gcc_options = '-Wall -O2 -std=c++14'
-let g:ale_c_cppcheck_options = ''
-let g:ale_cpp_cppcheck_options = ''
-let g:ale_linters.text = ['textlint', 'write-good', 'languagetool']
-" 如果没有 gcc 只有 clang 时（FreeBSD）
-if executable('gcc') == 0 && executable('clang')
-	let g:ale_linters.c += ['clang']
-	let g:ale_linters.cpp += ['clang']
-endif
+"let g:ale_c_gcc_options = '-Wall -O2 -std=c99'
+"let g:ale_cpp_gcc_options = '-Wall -O2 -std=c++14'
+"let g:ale_c_cppcheck_options = ''
+"let g:ale_cpp_cppcheck_options = ''
+"let g:ale_linters.text = ['textlint', 'write-good', 'languagetool']
+"" 如果没有 gcc 只有 clang 时（FreeBSD）
+"if executable('gcc') == 0 && executable('clang')
+"	let g:ale_linters.c += ['clang']
+"	let g:ale_linters.cpp += ['clang']
+"endif
 
 "----------------------------------------------------------------------
 " 自动补全
 "----------------------------------------------------------------------
 Plug 'ycm-core/YouCompleteMe'
-" let g:ycm_global_ycm_extra_conf =  '/home/gu/.vim/bundles/YouCompleteMe/.ycm_extra_conf.py'
 "不同语言的补全需要单独安装
-au FileType go nmap gd :YcmCompleter GoToDefinition<cr>
-au FileType c nmap gd :YcmCompleter GoToDefinition<cr>
+au FileType c nmap gd :tab YcmCompleter GoToDefinition<cr>
 au FileType cpp nmap gd :YcmCompleter GoToDefinition<cr>
 au FileType hpp nmap gd :YcmCompleter GoToDefinition<cr>
 au FileType h nmap gd :YcmCompleter GoToDefinition<cr>
 " 禁用预览功能，根据喜好打开
 let g:ycm_add_preview_to_completeopt = 0
-" 禁用诊断功能：我们用前面更好用的 ALE 代替
-let g:ycm_show_diagnostics_ui = 0
+"let g:ycm_show_diagnostics_ui = 0
+let g:ycm_filter_diagnostics = { 'go': {'regex': '.*'} }
 let g:ycm_server_log_level = 'info'
 let g:ycm_min_num_identifier_candidate_chars = 2
 let g:ycm_collect_identifiers_from_comments_and_strings = 1
 let g:ycm_complete_in_strings=1
+let g:ycm_confirm_extra_conf = 0
+let g:ycm_goto_buffer_command='split'
 set completeopt=menu,menuone
 " 两个字符自动触发语义补全
 let g:ycm_semantic_triggers =  {
@@ -447,13 +447,16 @@ Plug 'fatih/vim-go'
 "vim-go配置
 let g:go_auto_type_info = 0
 let g:go_highlight_types = 1
-let g:go_highlight_fields = 1
+let g:go_fmt_fail_silently = 1
+let g:go_list_height = 0
+"disbale gd of vim-go
+let g:go_def_mapping_enabled = 0
 let g:go_highlight_functions = 1
 let g:go_highlight_function_calls = 1
-let g:go_highlight_operators = 1
 let g:go_highlight_extra_types = 0
+let g:go_highlight_string_spellcheck = 1
 
-" au FileType go nmap gd <Plug>(go-def-tab)
+au FileType go nmap gd <Plug>(go-def-tab)
 
 " 更清晰的错误标注：默认一片红色背景，语法高亮都被搞没了
 " 只显示红色或者蓝色下划线或者波浪线
@@ -498,27 +501,27 @@ let &t_SR.="\e[4 q"
 let &t_EI.="\e[1 q"
 let &t_te.="\e[0 q"
 
-"非wsl用户应该将该区域注释
+"wsl用户应该将该区域取消注释
 "wsl系统剪切板支持，需要下载win32yank并配置PATH，https://github.com/equalsraf/win32yank
-autocmd TextYankPost * call YankDebounced()
-function! Yank(timer)
-    call system('win32yank.exe -i --crlf', @")
-    redraw!
-endfunction
+" autocmd TextYankPost * call YankDebounced()
+" function! Yank(timer)
+"     call system('win32yank.exe -i --crlf', @")
+"     redraw!
+" endfunction
 
-let g:yank_debounce_time_ms = 500
-let g:yank_debounce_timer_id = -1
+" let g:yank_debounce_time_ms = 500
+" let g:yank_debounce_timer_id = -1
 
-function! YankDebounced()
-    let l:now = localtime()
-    call timer_stop(g:yank_debounce_timer_id)
-    let g:yank_debounce_timer_id = timer_start(g:yank_debounce_time_ms, 'Yank')
-endfunction
+" function! YankDebounced()
+"     let l:now = localtime()
+"     call timer_stop(g:yank_debounce_timer_id)
+"     let g:yank_debounce_timer_id = timer_start(g:yank_debounce_time_ms, 'Yank')
+" endfunction
 
-function! Paste(mode)
-    let @" = system('win32yank.exe -o --lf')
-    return a:mode
-endfunction
+" function! Paste(mode)
+"     let @" = system('win32yank.exe -o --lf')
+"     return a:mode
+" endfunction
 
-map <expr> p Paste('p')
-map <expr> P Paste('P')
+" map <expr> p Paste('p')
+" map <expr> P Paste('P')
