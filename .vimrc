@@ -1,9 +1,3 @@
-"colorscheme paradox
-"colorscheme dracula
-"colorscheme desert
-"colorscheme monokai
-"colorscheme desert256
-"colorscheme gruvbox
 colorscheme papercol
 
 set vb t_vb=        "关闭vim提示音

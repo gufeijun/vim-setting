@@ -99,8 +99,8 @@ c+[chars]	#将选中的文字替换成chars
 
 ```shell
 # /或者?查询单词
-:/fuck	#向后搜索
-:?fuck	#向前搜索
+:/word	#向后搜索
+:?word	#向前搜索
 
 
 # !执行shell指令
